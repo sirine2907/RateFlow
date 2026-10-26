@@ -6,6 +6,7 @@ import '../providers/favorites_provider.dart';
 import '../providers/nav_provider.dart';
 import '../services/rate_service.dart';
 import '../utils/currency_list.dart';
+import '../widgets/currency_badge.dart';
 
 class FavoritesScreen extends StatefulWidget {
   final RateService? rateService;
@@ -59,7 +60,14 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
 
     return Card(
       child: ListTile(
-        leading: Text('${from.flag} → ${to.flag}', style: const TextStyle(fontSize: 18)),
+        leading: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            CurrencyBadge(from, size: 20),
+            const Icon(Icons.arrow_forward, size: 14),
+            CurrencyBadge(to, size: 20),
+          ],
+        ),
         title: Text('${from.code} → ${to.code}'),
         subtitle: FutureBuilder<double>(
           future: _rateService.getRate(from, to),

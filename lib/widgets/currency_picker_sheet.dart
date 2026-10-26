@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/currency.dart';
 import '../utils/currency_list.dart';
+import 'currency_badge.dart';
 
 // Bottom sheet that lets the user pick a currency, with fiat and
 // crypto shown as two separate sections.
@@ -92,7 +93,7 @@ class _CurrencyPickerSheetState extends State<_CurrencyPickerSheet> {
 
   Widget _currencyTile(Currency currency) {
     return ListTile(
-      leading: Text(currency.flag, style: const TextStyle(fontSize: 22)),
+      leading: CurrencyBadge(currency),
       title: Text(currency.code),
       subtitle: Text(currency.name),
       onTap: () => Navigator.of(context).pop(currency),

@@ -4,6 +4,7 @@ import '../models/currency.dart';
 import '../providers/converter_provider.dart';
 import '../providers/favorites_provider.dart';
 import '../theme/app_theme.dart';
+import '../widgets/currency_badge.dart';
 import '../widgets/currency_picker_sheet.dart';
 
 class ConvertScreen extends StatefulWidget {
@@ -131,7 +132,7 @@ class _ConvertScreenState extends State<ConvertScreen> {
               children: [
                 OutlinedButton.icon(
                   onPressed: onPickCurrency,
-                  icon: Text(currency.flag, style: const TextStyle(fontSize: 18)),
+                  icon: CurrencyBadge(currency, size: 18),
                   label: Text(currency.code),
                 ),
                 const SizedBox(width: 12),

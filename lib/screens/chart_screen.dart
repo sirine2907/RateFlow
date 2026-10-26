@@ -6,6 +6,7 @@ import '../models/currency.dart';
 import '../services/rate_service.dart';
 import '../theme/app_theme.dart';
 import '../utils/currency_list.dart';
+import '../widgets/currency_badge.dart';
 import '../widgets/currency_picker_sheet.dart';
 
 class _Period {
@@ -110,7 +111,7 @@ class _ChartScreenState extends State<ChartScreen> {
   Widget _pairButton(Currency currency, VoidCallback onTap) {
     return OutlinedButton.icon(
       onPressed: onTap,
-      icon: Text(currency.flag, style: const TextStyle(fontSize: 18)),
+      icon: CurrencyBadge(currency, size: 18),
       label: Text(currency.code),
     );
   }
@@ -174,10 +175,13 @@ class _ChartScreenState extends State<ChartScreen> {
             sideTitles: SideTitles(
               showTitles: true,
               reservedSize: 24,
-              interval: (points.length / 4).clamp(1, points.length).floorToDouble(),
+              interval: 1,
               getTitlesWidget: (value, meta) {
-                final index = value.toInt();
+                final index = value.round();
                 if (index < 0 || index >= points.length) return const SizedBox.shrink();
+                if (!_labelIndexes(points.length).contains(index)) {
+                  return const SizedBox.shrink();
+                }
                 return Padding(
                   padding: const EdgeInsets.only(top: 6),
                   child: Text(
@@ -205,5 +209,17 @@ class _ChartScreenState extends State<ChartScreen> {
         ],
       ),
     );
+  }
+
+  // 4 evenly spaced indexes (first, two in between, last) so date labels
+  // never land close enough together to overlap.
+  Set<int> _labelIndexes(int length) {
+    if (length <= 4) return {for (var i = 0; i < length; i++) i};
+    return {
+      0,
+      ((length - 1) / 3).round(),
+      ((length - 1) * 2 / 3).round(),
+      length - 1,
+    };
   }
 }
