@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'providers/converter_provider.dart';
+import 'providers/favorites_provider.dart';
 import 'providers/theme_provider.dart';
 import 'screens/home_shell.dart';
 import 'theme/app_theme.dart';
@@ -13,8 +15,12 @@ class RateFlowApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => ThemeProvider()..load(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ThemeProvider()..load()),
+        ChangeNotifierProvider(create: (_) => ConverterProvider()..convert()),
+        ChangeNotifierProvider(create: (_) => FavoritesProvider()..load()),
+      ],
       child: Consumer<ThemeProvider>(
         builder: (context, themeProvider, _) {
           return MaterialApp(
