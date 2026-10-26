@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'providers/converter_provider.dart';
 import 'providers/favorites_provider.dart';
+import 'providers/nav_provider.dart';
 import 'providers/theme_provider.dart';
 import 'screens/home_shell.dart';
 import 'theme/app_theme.dart';
@@ -20,6 +21,7 @@ class RateFlowApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ThemeProvider()..load()),
         ChangeNotifierProvider(create: (_) => ConverterProvider()..convert()),
         ChangeNotifierProvider(create: (_) => FavoritesProvider()..load()),
+        ChangeNotifierProvider(create: (_) => NavProvider()),
       ],
       child: Consumer<ThemeProvider>(
         builder: (context, themeProvider, _) {
