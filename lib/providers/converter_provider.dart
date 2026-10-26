@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import '../models/currency.dart';
-import '../services/crypto_api.dart';
-import '../services/fiat_api.dart';
 import '../services/rate_cache.dart';
+import '../services/rate_service.dart';
 import '../utils/currency_list.dart';
 
 class ConverterProvider extends ChangeNotifier {
-  final FiatApi _fiatApi = FiatApi();
-  final CryptoApi _cryptoApi = CryptoApi();
+  final RateService _rateService = RateService();
   final RateCache _cache = RateCache();
 
   Currency from = currencyByCode('USD');
@@ -48,7 +46,7 @@ class ConverterProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final rate = await _getRate(from, to);
+      final rate = await _rateService.getRate(from, to);
       result = amount * rate;
       await _cache.save(from.code, to.code, rate);
     } catch (e) {
@@ -63,27 +61,5 @@ class ConverterProvider extends ChangeNotifier {
 
     isLoading = false;
     notifyListeners();
-  }
-
-  // Figures out which API(s) to call based on whether each side is
-  // fiat or crypto, then returns "how much of [to] for 1 of [from]".
-  Future<double> _getRate(Currency from, Currency to) async {
-    if (!from.isCrypto && !to.isCrypto) {
-      return _fiatApi.getRate(from.code, to.code);
-    }
-
-    if (from.isCrypto && !to.isCrypto) {
-      return _cryptoApi.getPrice(from.coinGeckoId!, to.code);
-    }
-
-    if (!from.isCrypto && to.isCrypto) {
-      final price = await _cryptoApi.getPrice(to.coinGeckoId!, from.code);
-      return 1 / price;
-    }
-
-    // Both crypto: cross the two USD prices.
-    final fromUsd = await _cryptoApi.getPrice(from.coinGeckoId!, 'usd');
-    final toUsd = await _cryptoApi.getPrice(to.coinGeckoId!, 'usd');
-    return fromUsd / toUsd;
   }
 }
