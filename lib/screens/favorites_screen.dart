@@ -8,14 +8,22 @@ import '../services/rate_service.dart';
 import '../utils/currency_list.dart';
 
 class FavoritesScreen extends StatefulWidget {
-  const FavoritesScreen({super.key});
+  final RateService? rateService;
+
+  const FavoritesScreen({super.key, this.rateService});
 
   @override
   State<FavoritesScreen> createState() => _FavoritesScreenState();
 }
 
 class _FavoritesScreenState extends State<FavoritesScreen> {
-  final _rateService = RateService();
+  late final RateService _rateService;
+
+  @override
+  void initState() {
+    super.initState();
+    _rateService = widget.rateService ?? RateService();
+  }
 
   @override
   Widget build(BuildContext context) {

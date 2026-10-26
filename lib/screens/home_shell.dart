@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/nav_provider.dart';
+import '../services/rate_service.dart';
 import 'convert_screen.dart';
 import 'chart_screen.dart';
 import 'favorites_screen.dart';
@@ -8,21 +9,23 @@ import 'settings_screen.dart';
 
 // Bottom-nav shell that swaps between the 4 main tabs.
 class HomeShell extends StatelessWidget {
-  const HomeShell({super.key});
+  final RateService? rateService;
 
-  static const _screens = [
-    ConvertScreen(),
-    ChartScreen(),
-    FavoritesScreen(),
-    SettingsScreen(),
-  ];
+  const HomeShell({super.key, this.rateService});
 
   @override
   Widget build(BuildContext context) {
     final nav = context.watch<NavProvider>();
 
+    final screens = [
+      const ConvertScreen(),
+      ChartScreen(rateService: rateService),
+      FavoritesScreen(rateService: rateService),
+      const SettingsScreen(),
+    ];
+
     return Scaffold(
-      body: IndexedStack(index: nav.index, children: _screens),
+      body: IndexedStack(index: nav.index, children: screens),
       bottomNavigationBar: NavigationBar(
         selectedIndex: nav.index,
         onDestinationSelected: nav.goTo,

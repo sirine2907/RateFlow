@@ -18,6 +18,7 @@ class AppTheme {
     final base = ThemeData.light(useMaterial3: true);
     return base.copyWith(
       scaffoldBackgroundColor: AppColors.cream,
+      textTheme: base.textTheme.apply(fontFamily: 'Inter'),
       colorScheme: base.colorScheme.copyWith(
         primary: AppColors.teal,
         secondary: AppColors.coral,
@@ -59,6 +60,7 @@ class AppTheme {
     final base = ThemeData.dark(useMaterial3: true);
     return base.copyWith(
       scaffoldBackgroundColor: AppColors.darkBg,
+      textTheme: base.textTheme.apply(fontFamily: 'Inter'),
       colorScheme: base.colorScheme.copyWith(
         primary: AppColors.coral,
         secondary: AppColors.teal,

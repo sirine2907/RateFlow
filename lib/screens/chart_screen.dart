@@ -22,14 +22,16 @@ const _periods = [
 ];
 
 class ChartScreen extends StatefulWidget {
-  const ChartScreen({super.key});
+  final RateService? rateService;
+
+  const ChartScreen({super.key, this.rateService});
 
   @override
   State<ChartScreen> createState() => _ChartScreenState();
 }
 
 class _ChartScreenState extends State<ChartScreen> {
-  final _rateService = RateService();
+  late final RateService _rateService;
 
   Currency _from = currencyByCode('BTC');
   Currency _to = currencyByCode('USD');
@@ -40,6 +42,7 @@ class _ChartScreenState extends State<ChartScreen> {
   @override
   void initState() {
     super.initState();
+    _rateService = widget.rateService ?? RateService();
     _load();
   }
 

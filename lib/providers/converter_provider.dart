@@ -5,8 +5,11 @@ import '../services/rate_service.dart';
 import '../utils/currency_list.dart';
 
 class ConverterProvider extends ChangeNotifier {
-  final RateService _rateService = RateService();
+  final RateService _rateService;
   final RateCache _cache = RateCache();
+
+  ConverterProvider({RateService? rateService})
+      : _rateService = rateService ?? RateService();
 
   Currency from = currencyByCode('USD');
   Currency to = currencyByCode('EUR');
